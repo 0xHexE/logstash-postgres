@@ -1,7 +1,10 @@
+# First ARGs before FROM
 ARG LOGSTASH_VERSION
 ARG DEBIAN_VERSION
+
 FROM bitnami/logstash:${LOGSTASH_VERSION}-debian-${DEBIAN_VERSION}
 
+# Redeclare ARG after FROM to make it available
 ARG POSTGRES_DRIVER_VERSION
 ENV POSTGRES_DRIVER_VERSION=${POSTGRES_DRIVER_VERSION}
 
@@ -14,7 +17,10 @@ RUN install_packages curl
 RUN mkdir -p /opt/bitnami/logstash/plugins
 
 # Install PostgreSQL JDBC driver
-RUN curl -L --output /opt/bitnami/logstash/plugins/postgresql.jar \
+RUN echo "Installing PostgreSQL JDBC driver version: ${POSTGRES_DRIVER_VERSION}" && \
+    curl -L --output /opt/bitnami/logstash/plugins/postgresql.jar \
+    https://jdbc.postgresql.org/download/postgresql-jdbc-${POSTGRES_DRIVER_VERSION}.jar \
+    || curl -L --output /opt/bitnami/logstash/plugins/postgresql.jar \
     https://jdbc.postgresql.org/download/postgresql-${POSTGRES_DRIVER_VERSION}.jar
 
 # Set proper permissions
@@ -23,5 +29,7 @@ RUN chown -R 1001:1001 /opt/bitnami/logstash/plugins
 # Switch back to non-root user
 USER 1001
 
+ENV POSTGRES_DRIVER_PATH=/opt/bitnami/logstash/plugins/postgresql.jar
+
 # Add the directory to the classpath
-ENV LS_JAVA_OPTS="-Xmx1g -Xms1g -Djava.class.path=/opt/bitnami/logstash/plugins/postgresql.jar"
+ENV LS_JAVA_OPTS="-Djava.class.path=/opt/bitnami/logstash/plugins/postgresql.jar"
