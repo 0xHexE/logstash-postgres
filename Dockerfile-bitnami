@@ -19,9 +19,7 @@ RUN mkdir -p /opt/bitnami/logstash/plugins
 # Install PostgreSQL JDBC driver
 RUN echo "Installing PostgreSQL JDBC driver version: ${POSTGRES_DRIVER_VERSION}" && \
     curl -L --output /opt/bitnami/logstash/plugins/postgresql.jar \
-    https://jdbc.postgresql.org/download/postgresql-jdbc-${POSTGRES_DRIVER_VERSION}.jar \
-    || curl -L --output /opt/bitnami/logstash/plugins/postgresql.jar \
-    https://jdbc.postgresql.org/download/postgresql-${POSTGRES_DRIVER_VERSION}.jar
+    https://jdbc.postgresql.org/download/postgresql-jdbc-${POSTGRES_DRIVER_VERSION}.jar
 
 # Set proper permissions
 RUN chown -R 1001:1001 /opt/bitnami/logstash/plugins

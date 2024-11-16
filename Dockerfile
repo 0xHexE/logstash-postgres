@@ -11,9 +11,7 @@ USER root
 # Install PostgreSQL JDBC driver with specified version
 RUN echo "Installing PostgreSQL JDBC driver version: ${POSTGRES_DRIVER_VERSION}" && \
     curl -L --output /usr/share/logstash/logstash-core/lib/jars/postgresql.jar \
-    https://jdbc.postgresql.org/download/postgresql-jdbc-${POSTGRES_DRIVER_VERSION}.jar \
-    || curl -L --output /usr/share/logstash/logstash-core/lib/jars/postgresql.jar \
-    https://jdbc.postgresql.org/download/postgresql-${POSTGRES_DRIVER_VERSION}.jar
+    https://jdbc.postgresql.org/download/postgresql-jdbc-${POSTGRES_DRIVER_VERSION}.jar
 
 # Ensure proper permissions
 RUN chown logstash:root /usr/share/logstash/logstash-core/lib/jars/postgresql.jar
